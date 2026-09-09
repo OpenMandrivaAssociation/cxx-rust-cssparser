@@ -54,9 +54,19 @@ replace-with = "vendored-sources"
 directory = "vendor"
 EOF
 
+# Corrosion's ninja rule runs `cargo install cxxbridge-cmd --locked`,
+# which wants clap 4.5.54; the crate lock vendors clap 4.6.1. Install
+# cxxbridge without --locked so cmake find_program() skips that rule.
+%conf -p
+export CARGO_NET_OFFLINE=true
+export CARGO_HOME="$PWD/rust/.cargo"
+cargo install cxxbridge-cmd --version 1.0.194 --offline --root "$PWD/_cxxbridge"
+export PATH="$PWD/_cxxbridge/bin:$PATH"
+
 %build -p
 export CARGO_NET_OFFLINE=true
 export CARGO_HOME="$PWD/rust/.cargo"
+export PATH="$PWD/_cxxbridge/bin:$PATH"
 
 %files -n %{libname}
 %{_libdir}/libcxx-rust-cssparser.so.*
