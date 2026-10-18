@@ -3,7 +3,7 @@
 
 Summary:	Library for parsing CSS using the Rust cssparser crate
 Name:		cxx-rust-cssparser
-Version:	1.0.0
+Version:	1.1.0
 Release:	1
 License:	BSD-2-Clause
 Group:		System/Libraries
@@ -54,13 +54,12 @@ replace-with = "vendored-sources"
 directory = "vendor"
 EOF
 
-# Corrosion's ninja rule runs `cargo install cxxbridge-cmd --locked`,
-# which wants clap 4.5.54; the crate lock vendors clap 4.6.1. Install
-# cxxbridge without --locked so cmake find_program() skips that rule.
+# Corrosion's ninja rule runs `cargo install cxxbridge-cmd --locked`.
+# Preinstall the lockfile's cxxbridge so cmake find_program() skips that rule.
 %conf -p
 export CARGO_NET_OFFLINE=true
 export CARGO_HOME="$PWD/rust/.cargo"
-cargo install cxxbridge-cmd --version 1.0.194 --offline --root "$PWD/_cxxbridge"
+cargo install cxxbridge-cmd --version 1.0.199 --offline --root "$PWD/_cxxbridge"
 export PATH="$PWD/_cxxbridge/bin:$PATH"
 
 %build -p
